@@ -1,0 +1,17 @@
+<dom-module id="image-element">
+  <template>
+    <img class$="[[className]]" src$="[[src]]" alt$="[[alt]]">
+    <style>
+      :host img{
+          width:100%;
+          border:1px solid black;
+          margin-bottom:.5em
+      }
+    </style>
+  </template>
+  <script>
+    Polymer({
+      is: 'image-element'
+    });
+  </script>
+</dom-module>

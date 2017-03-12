@@ -1,0 +1,68 @@
+<link rel="import" href="us-state.html" id="rel">
+<dom-module id="state-selector">
+
+  <template>
+    <div> Employee list: </div>
+    <select name="state" id="state" on-change="_itemSelected">
+    <template is="dom-repeat" items="{{employees}}">
+        <option value="[[item.sLabel]]">[[item.sLabel]]</option>
+    </template>
+  </select>
+  <us-state state="[[state]]"></us-state>
+  </template>
+  <style>
+     :host {
+      display: block;
+    }
+  </style>
+
+  </template>
+  <script src="node_modules/qwest/qwest.min.js"></script>
+  <script src="node_modules/lodash/lodash.js"></script>
+  <script>
+    const query = `SELECT DISTINCT ?s ?sLabel ?article ?nick ?flag ?pop ?map WHERE {
+      ?s wdt:P31 wd:Q35657.
+      ?s wdt:P1449 ?nick.
+      ?s wdt:P1082 ?pop.
+      ?s wdt:P41 ?flag.
+      ?s wdt:P242 ?map.
+           OPTIONAL {
+      ?article schema:about ?s .
+      ?article schema:inLanguage "en" .
+      ?article schema:isPartOf <https://en.wikipedia.org/> .
+    }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}`
+
+    const propertiesObject = {
+      query: query,
+      format: 'json'
+    }
+
+    function transform(o1) {
+      return _.mapValues(o1, function(o2) {
+        return (o2.value)
+      });
+    }
+
+    Polymer({
+      is: 'state-selector',
+      ready: function() {
+        let bindFn = function(xhr, results) {
+          this.employees = _.map(JSON.parse(results).results.bindings, transform);
+          console.log(this.employees);
+        }.bind(this);
+
+        qwest.get('https://query.wikidata.org/bigdata/namespace/wdq/sparql', propertiesObject, {
+          cache: true
+        }).then(bindFn)
+      },
+      _itemSelected: function(e) {
+        let _state = _.find(this.employees, function(item) {
+          return item.sLabel === e.currentTarget.value;
+        })
+        this.state = _state;
+      }
+    });
+  </script>
+</dom-module>

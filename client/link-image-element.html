@@ -1,0 +1,13 @@
+<link rel="import" href="image-element.html" id="rel">
+<dom-module id="link-image-element">
+  <template>
+  <a href$="[[link]]" aria-label="[[alt]]_Link">
+    <image-element src="[[image]]" alt="[[alt]]"></image-element>
+  </a>
+  </template>
+  <script>
+    Polymer({
+      is: 'link-image-element'
+    });
+  </script>
+</dom-module>

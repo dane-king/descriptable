@@ -1,0 +1,53 @@
+<link rel="import" href="image-element.html" id="rel">
+<link rel="import" href="link-image-element.html" id="rel">
+
+<dom-module id="us-state">
+
+  <template>
+<div>
+<h1>State of [[state.sLabel]]</h1>
+  <h3>[[state.nick]]</h3>
+  <h5>population: [[state.pop]]</h5>
+  <link-image-element link="[[state.article]]" image="[[state.flag]]" alt="Flag"></link-image-element>
+  <image-element src="[[state.map]]" alt="Map"></image-element>
+</div> 
+<style>
+  :host{
+    --color-background:#dedede;
+    --card-box-shadow:5px 5px 10px 1px rgba(0, 0, 0, 0.4)
+  }
+  :host div {
+    position:relative;
+    background-color:var(--custom-color-background,--color-background);
+    flex:1 0 auto;
+    width:25%;
+    padding:0  .75em;
+    text-align:center;
+    box-shadow: var(--custom-card-box-shadow, --card-box-shadow)
+}
+
+h3,h5{
+  line-height:3px;
+  font-weight:normal;
+}
+
+
+</style>
+</template>
+  <script>
+    Polymer({
+      is: 'us-state',
+      properties: {
+        state: Object
+      },
+      ready: function() {
+        this.log('ready');
+      },
+      log: function(cycle) {
+        console.log('*******', this.state);
+
+      }
+    })
+  </script>
+
+</dom-module>
